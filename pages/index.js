@@ -1,65 +1,62 @@
 import Head from 'next/head'
+import { useEffect, useState } from "react";
+import { Brightness6Rounded } from "@material-ui/icons";
 import styles from '../styles/Home.module.css'
 
+
+
+
 export default function Home() {
+  //here we have a state for to deside which theme have to display
+  const [theme, setTheme] = useState("light");
+  //here we have a state for to keep track of how many times the button has been clicked
+  const [count, setCount] = useState(0);
+
+  // here we have a useEffect to deside when to run this code 
+  useEffect(() => {
+    // so here we save the theme in localStorage to keep track of the last theme so has been used after refrshing.
+    document.documentElement.setAttribute(
+      "data-theme",
+      localStorage.getItem("theme")
+    );
+    // and here we update the localStorage by saving the last theme (dark or light)...
+    setTheme(localStorage.getItem("theme"));
+    // by including the dependencies array we saying run this code once and when ever the theme changes.
+  }, [theme]);
+
+   //here is our helper function some are risponsbale for switch the theme
+  const switchTheme = () => {
+    if (theme === "light") {
+      saveTheme("dark");
+    } else {
+      saveTheme("light");
+    }
+  };
+  //here is our helper function some are risponsbale for saving the theme on localStorage
+  const saveTheme = (theme) => {
+    setTheme(theme);
+    localStorage.setItem("theme", theme);
+    document.documentElement.setAttribute("data-theme", theme);
+  };
+
+   //here is our helper function some are risponsbale for counting the clicks
+  const counter = () => { 
+    setCount(count + 1);
+  }
+
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>Dark and light mode </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+      <h1>You have clicked me  { count } times</h1>
+      {/* here i learned something new by including more than one function in the same onClick  */}
+      <button className={styles.themeSwitcher} onClick={() => { counter(); switchTheme(); }}>
+       click me to change the theme < Brightness6Rounded />
+      </button>
+      <p>Your {theme} mode is on now.</p>
     </div>
   )
 }
