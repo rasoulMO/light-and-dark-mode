@@ -7,7 +7,7 @@ you email about that, but i didn't get respond from you!! so now i will send you
  -Next js: which is a React framework.
  -Css for the styling.
  -Material-ui for the icons.
- -Vercel for hosting.
+ -Netlify for hosting.
 
 
 ## Steps of the building
